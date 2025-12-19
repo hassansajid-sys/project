@@ -1,0 +1,30 @@
+name: TXT Files CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate-txt:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: List txt files
+        run: |
+          echo "Listing all .txt files:"
+          ls -l *.txt || echo "No txt files in root directory"
+
+      - name: Validate txt files
+        run: |
+          echo "Checking txt files are not empty..."
+          for file in *.txt; do
+            if [ ! -s "$file" ]; then
+              echo "❌ $file is empty"
+              exit 1
+            fi
+          done
+          echo "✅ All txt files are valid"
